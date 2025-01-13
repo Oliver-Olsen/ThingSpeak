@@ -1,3 +1,15 @@
+/**
+ * @file main.cpp
+ * @author Nils Wulff s223968 & Oliver Olsen s205443
+ * @brief ThingSpeak Task
+ * @version 0.1
+ * @date 2025-01-13
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
+
+
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <ThingSpeak.h>
