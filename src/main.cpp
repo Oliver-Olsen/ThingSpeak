@@ -9,6 +9,11 @@
  * 
  */
 
+#define tr 2 //Trigger is set to pin 2
+#define ec 3 //Echo is set to pin 3
+
+float timer = 0; //Creates a timer
+float distance = 0; //Creates a distance variable
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
@@ -21,16 +26,14 @@ const char * APIKey = "KG5QAN33MVL7CXIR"; //your TS API
 const char* server = "api.thingspeak.com";
 const int postDelay = 20 * 1000; //post data every 20 seconds
 
-#define button D0 
-bool buttonPressed = false; 
-
 
 void setup() 
 {
   Serial.begin(115200);
-  WiFi.begin(ssid, pass);
+  WiFi.begin(ssid, pass); 
 
-  pinMode(button, INPUT_PULLUP); 
+  pinMode(tr, OUTPUT); //Trigger is set as an output
+  pinMode(ec, INPUT); //Echo is set as an input
 }
 
 float data; //measured data
@@ -39,17 +42,22 @@ float data; //measured data
 
 void loop() 
 {
-  if (digitalRead(button == 0 && buttonPressed == false)) {
-    buttonPressed = true; 
-  } else 
-  if (digitalRead(button == 1 && buttonPressed == true)) {
-    buttonPressed = false;
+  timer = 0; //Timer is reset
+  digitalWrite(tr, HIGH); //Trigger pin is initailized
+  delayMicroseconds(10); 
+  digitalWrite(tr, LOW); 
+  timer = pulseIn(ec, HIGH); //Time between Trigger LOW and Echo HIGH is found
+  if (timer <= 23200){ //Out-of-range is checked, and if in range: 
+    timer += 10; //Delay between Trigger HIGH and Trigger LOW added
+    distance = timer / 58; //Distance is calculated from time
+    Serial.print(distance); //Distance is printed to serial
+  } else { //If out of range: 
+    Serial.print(distance); //Previous valid distance is printed
   }
 
-  data = 42.0;
   ThingSpeak.begin(client);
   client.connect(server, 80); //connect(URL, Port)
-  ThingSpeak.setField(2, buttonPressed); //set data on the X graph
+  ThingSpeak.setField(1, distance); //set data on the X graph
   ThingSpeak.writeFields(channelID, APIKey);//post everything to TS
   client.stop();
   delay(postDelay); //wait and then post again
