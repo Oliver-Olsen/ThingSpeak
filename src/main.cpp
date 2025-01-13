@@ -13,8 +13,8 @@
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <ThingSpeak.h>
-const char* ssid = "WiFi SSID";
-const char* pass = "Password";
+const char* ssid = "LW_POCO";
+const char* pass = "ezpz42069";
 WiFiClient client;
 unsigned long channelID = 2808206; //your TS channal
 const char * APIKey = "KG5QAN33MVL7CXIR"; //your TS API
@@ -49,7 +49,7 @@ void loop()
   data = 42.0;
   ThingSpeak.begin(client);
   client.connect(server, 80); //connect(URL, Port)
-  ThingSpeak.setField(buttonPressed, data); //set data on the X graph
+  ThingSpeak.setField(2, buttonPressed); //set data on the X graph
   ThingSpeak.writeFields(channelID, APIKey);//post everything to TS
   client.stop();
   delay(postDelay); //wait and then post again
