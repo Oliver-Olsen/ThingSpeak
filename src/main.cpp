@@ -28,7 +28,7 @@ DHT dht(DHTPIN, DHTTYPE);
 
 float timer = 0; //Creates a timer
 float distance = 0; //Creates a distance variable
-
+float t = 0;
 
 const char* ssid = "LW_POCO";
 const char* pass = "ezpz42069";
@@ -48,7 +48,7 @@ void setup()
 
   pinMode(trigger, OUTPUT); //Trigger is set as an output
   pinMode(echo, INPUT); //Echo is set as an input
-
+  
  
 }
 
@@ -69,12 +69,14 @@ void loop()
     Serial.print(distance); //Previous valid distance is printed
   }
 
+  t = dht.readTemperature();
   
 
   ThingSpeak.begin(client);
   client.connect(server, 80); //connect(URL, Port)
   ThingSpeak.setField(1, distance); //set data on the X graph
-  ThingSpeak.setField(2, dht.readTemperature()); //set data on the X graph
+  ThingSpeak.setField(2, t); //set data on the X graph
+  ThingSpeak.setField(3, WiFi.RSSI()); //set data on the X graph
   ThingSpeak.writeFields(channelID, APIKey);//post everything to TS
   client.stop();
   delay(postDelay); //wait and then post again
