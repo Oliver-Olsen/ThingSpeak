@@ -18,7 +18,7 @@
 #define button D0 
 #define placa "Arduino"
 #define Voltage_Resolution 5
-#define pin A0 //Analog input 0 of your arduino
+#define pin ADC0 //Analog input 0 of your arduino
 #define type "MQ-135" //MQ135
 #define ADC_Bit_Resolution 10 // For arduino UNO/MEGA/NANO
 #define RatioMQ135CleanAir 3.6//RS / R0 = 3.6 ppm  
